@@ -1,0 +1,746 @@
+{
+	"info": {
+		"_postman_id": "microservicios-api-collection",
+		"name": "Microservicios API - Productos e Inventario",
+		"description": "Colección completa de endpoints para los microservicios de Productos e Inventario\n\n**Servicios:**\n- Productos Service (Puerto 8081)\n- Inventario Service (Puerto 8082)\n\n**Características:**\n- Endpoints siguiendo estándar JSON API\n- Autenticación con API Keys\n- Validaciones de entrada\n- Manejo de errores estandarizado\n- Documentación completa con ejemplos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "microservicios-team"
+	},
+	"item": [
+		{
+			"name": "Productos Service",
+			"description": "Microservicio de gestión de productos (Puerto 8081)",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{productos_base_url}}/productos/health",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos",
+								"health"
+							]
+						},
+						"description": "Verifica el estado del servicio de productos"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Producto",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\": {\n    \"type\": \"productos\",\n    \"attributes\": {\n      \"nombre\": \"Laptop Gaming Pro\",\n      \"precio\": 1499.99,\n      \"descripcion\": \"Laptop para gaming de alto rendimiento con RTX 4060\"\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{productos_base_url}}/productos",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos"
+							]
+						},
+						"description": "Crea un nuevo producto en el sistema"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Producto por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{productos_base_url}}/productos/{{producto_id}}",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos",
+								"{{producto_id}}"
+							]
+						},
+						"description": "Recupera un producto específico por su ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todos los Productos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{productos_base_url}}/productos",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos"
+							]
+						},
+						"description": "Obtiene la lista completa de productos disponibles"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Productos por Nombre",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{productos_base_url}}/productos/buscar?nombre={{nombre_producto}}",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos",
+								"buscar"
+							],
+							"query": [
+								{
+									"key": "nombre",
+									"value": "{{nombre_producto}}",
+									"description": "Nombre o parte del nombre a buscar"
+								}
+							]
+						},
+						"description": "Busca productos que contengan el nombre especificado"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Productos por Precio",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{productos_base_url}}/productos/precio?precioMin={{precio_min}}&precioMax={{precio_max}}",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos",
+								"precio"
+							],
+							"query": [
+								{
+									"key": "precioMin",
+									"value": "{{precio_min}}",
+									"description": "Precio mínimo del rango"
+								},
+								{
+									"key": "precioMax",
+									"value": "{{precio_max}}",
+									"description": "Precio máximo del rango"
+								}
+							]
+						},
+						"description": "Busca productos dentro de un rango de precios"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Producto",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\": {\n    \"type\": \"productos\",\n    \"attributes\": {\n      \"nombre\": \"Laptop Gaming Pro Actualizada\",\n      \"precio\": 1599.99,\n      \"descripcion\": \"Laptop para gaming de alto rendimiento con RTX 4060 - Versión actualizada\"\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{productos_base_url}}/productos/{{producto_id}}",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos",
+								"{{producto_id}}"
+							]
+						},
+						"description": "Actualiza un producto existente"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Producto",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{productos_base_url}}/productos/{{producto_id}}",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos",
+								"{{producto_id}}"
+							]
+						},
+						"description": "Elimina un producto del sistema"
+					},
+					"response": []
+				},
+				{
+					"name": "Verificar Existencia de Producto",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{productos_base_url}}/productos/{{producto_id}}/existe",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos",
+								"{{producto_id}}",
+								"existe"
+							]
+						},
+						"description": "Verifica si un producto existe en el sistema"
+					},
+					"response": []
+				},
+				{
+					"name": "Contar Productos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{productos_base_url}}/productos/contar",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos",
+								"contar"
+							]
+						},
+						"description": "Obtiene el número total de productos en el sistema"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inventario Service",
+			"description": "Microservicio de gestión de inventario y compras (Puerto 8082)",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventario_base_url}}/inventario/health",
+							"host": [
+								"{{inventario_base_url}}"
+							],
+							"path": [
+								"inventario",
+								"health"
+							]
+						},
+						"description": "Verifica el estado del servicio de inventario"
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar Inventario",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{inventario_base_url}}/inventario/{{producto_id}}",
+							"host": [
+								"{{inventario_base_url}}"
+							],
+							"path": [
+								"inventario",
+								"{{producto_id}}"
+							]
+						},
+						"description": "Consulta el inventario de un producto específico"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Inventario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{inventario_base_url}}/inventario/{{producto_id}}?cantidad={{cantidad_inicial}}",
+							"host": [
+								"{{inventario_base_url}}"
+							],
+							"path": [
+								"inventario",
+								"{{producto_id}}"
+							],
+							"query": [
+								{
+									"key": "cantidad",
+									"value": "{{cantidad_inicial}}",
+									"description": "Cantidad inicial del inventario"
+								}
+							]
+						},
+						"description": "Crea un nuevo registro de inventario para un producto"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Inventario",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\": {\n    \"type\": \"inventario\",\n    \"attributes\": {\n      \"cantidad\": 75\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{inventario_base_url}}/inventario/{{producto_id}}",
+							"host": [
+								"{{inventario_base_url}}"
+							],
+							"path": [
+								"inventario",
+								"{{producto_id}}"
+							]
+						},
+						"description": "Actualiza la cantidad disponible de un producto"
+					},
+					"response": []
+				},
+				{
+					"name": "Realizar Compra",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\": {\n    \"type\": \"compras\",\n    \"attributes\": {\n      \"productoId\": {{producto_id}},\n      \"cantidad\": 2\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{inventario_base_url}}/inventario/compras",
+							"host": [
+								"{{inventario_base_url}}"
+							],
+							"path": [
+								"inventario",
+								"compras"
+							]
+						},
+						"description": "Realiza una compra de productos (endpoint principal del flujo de compra)"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todos los Inventarios",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{inventario_base_url}}/inventario",
+							"host": [
+								"{{inventario_base_url}}"
+							],
+							"path": [
+								"inventario"
+							]
+						},
+						"description": "Obtiene la lista completa de inventarios"
+					},
+					"response": []
+				},
+				{
+					"name": "Productos con Inventario Bajo",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{inventario_base_url}}/inventario/bajos?cantidadMinima={{cantidad_minima}}",
+							"host": [
+								"{{inventario_base_url}}"
+							],
+							"path": [
+								"inventario",
+								"bajos"
+							],
+							"query": [
+								{
+									"key": "cantidadMinima",
+									"value": "{{cantidad_minima}}",
+									"description": "Cantidad mínima para considerar inventario bajo (default: 10)"
+								}
+							]
+						},
+						"description": "Obtiene productos con inventario bajo"
+					},
+					"response": []
+				},
+				{
+					"name": "Productos Sin Stock",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{inventario_base_url}}/inventario/sin-stock",
+							"host": [
+								"{{inventario_base_url}}"
+							],
+							"path": [
+								"inventario",
+								"sin-stock"
+							]
+						},
+						"description": "Obtiene productos sin inventario (stock = 0)"
+					},
+					"response": []
+				},
+				{
+					"name": "Estadísticas del Inventario",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"url": {
+							"raw": "{{inventario_base_url}}/inventario/estadisticas",
+							"host": [
+								"{{inventario_base_url}}"
+							],
+							"path": [
+								"inventario",
+								"estadisticas"
+							]
+						},
+						"description": "Obtiene estadísticas generales del inventario"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flujos de Prueba",
+			"description": "Flujos completos para probar la funcionalidad end-to-end",
+			"item": [
+				{
+					"name": "Flujo Completo: Crear Producto y Inventario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\": {\n    \"type\": \"productos\",\n    \"attributes\": {\n      \"nombre\": \"Mouse Gaming RGB\",\n      \"precio\": 89.99,\n      \"descripcion\": \"Mouse gaming con iluminación RGB y 6 botones programables\"\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{productos_base_url}}/productos",
+							"host": [
+								"{{productos_base_url}}"
+							],
+							"path": [
+								"productos"
+							]
+						},
+						"description": "**Paso 1:** Crear un nuevo producto\n\n**Siguiente paso:** Usar el ID del producto creado para crear inventario"
+					},
+					"response": []
+				},
+				{
+					"name": "Flujo Completo: Realizar Compra",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\": {\n    \"type\": \"compras\",\n    \"attributes\": {\n      \"productoId\": {{producto_id}},\n      \"cantidad\": 3\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{inventario_base_url}}/inventario/compras",
+							"host": [
+								"{{inventario_base_url}}"
+							],
+							"path": [
+								"inventario",
+								"compras"
+							]
+						},
+						"description": "**Flujo de Compra Completo:**\n1. Valida que el producto existe\n2. Verifica disponibilidad en inventario\n3. Actualiza el inventario\n4. Registra la compra\n5. Retorna detalles de la transacción"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script de pre-request para logging",
+					"console.log('Ejecutando request: ' + pm.request.name);",
+					"console.log('URL: ' + pm.request.url.toString());",
+					"console.log('Método: ' + pm.request.method);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script de test para validaciones básicas",
+					"pm.test('Status code is 2xx', function () {",
+					"    pm.response.to.have.status(200, 201, 204);",
+					"});",
+					"",
+					"pm.test('Response time is less than 2000ms', function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});",
+					"",
+					"// Validar que la respuesta es JSON (excepto para health checks)",
+					"if (!pm.request.url.path.includes('health')) {",
+					"    pm.test('Response is JSON', function () {",
+					"        pm.response.to.be.json;",
+					"    });",
+					"}",
+					"",
+					"// Log de la respuesta",
+					"console.log('Response Status: ' + pm.response.status);",
+					"console.log('Response Time: ' + pm.response.responseTime + 'ms');"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "productos_base_url",
+			"value": "http://localhost:8081",
+			"type": "string",
+			"description": "URL base del microservicio de productos"
+		},
+		{
+			"key": "inventario_base_url",
+			"value": "http://localhost:8082",
+			"type": "string",
+			"description": "URL base del microservicio de inventario"
+		},
+		{
+			"key": "api_key",
+			"value": "microservicios-api-key-2024",
+			"type": "string",
+			"description": "API Key para autenticación entre servicios"
+		},
+		{
+			"key": "producto_id",
+			"value": "1",
+			"type": "string",
+			"description": "ID del producto para pruebas (se actualiza dinámicamente)"
+		},
+		{
+			"key": "nombre_producto",
+			"value": "Laptop",
+			"type": "string",
+			"description": "Nombre del producto para búsquedas"
+		},
+		{
+			"key": "precio_min",
+			"value": "100",
+			"type": "string",
+			"description": "Precio mínimo para búsquedas por rango"
+		},
+		{
+			"key": "precio_max",
+			"value": "2000",
+			"type": "string",
+			"description": "Precio máximo para búsquedas por rango"
+		},
+		{
+			"key": "cantidad_inicial",
+			"value": "50",
+			"type": "string",
+			"description": "Cantidad inicial para crear inventario"
+		},
+		{
+			"key": "cantidad_minima",
+			"value": "10",
+			"type": "string",
+			"description": "Cantidad mínima para considerar inventario bajo"
+		}
+	]
+}
