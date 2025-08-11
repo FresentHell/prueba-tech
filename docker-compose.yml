@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: microservicios-postgres
+    environment:
+      POSTGRES_DB: microservicios_db
+      POSTGRES_USER: microservicios_user
+      POSTGRES_PASSWORD: microservicios_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - microservicios-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U microservicios_user -d microservicios_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Microservicio de Productos
+  productos-service:
+    build:
+      context: ./productos-service
+      dockerfile: Dockerfile
+    container_name: productos-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/microservicios_db
+      SPRING_DATASOURCE_USERNAME: microservicios_user
+      SPRING_DATASOURCE_PASSWORD: microservicios_password
+      INVENTARIO_SERVICE_URL: http://inventario-service:8082
+      INVENTARIO_SERVICE_API_KEY: microservicios-api-key-2024
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - microservicios-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Microservicio de Inventario
+  inventario-service:
+    build:
+      context: ./inventario-service
+      dockerfile: Dockerfile
+    container_name: inventario-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/microservicios_db
+      SPRING_DATASOURCE_USERNAME: microservicios_user
+      SPRING_DATASOURCE_PASSWORD: microservicios_password
+      PRODUCTOS_SERVICE_URL: http://productos-service:8081
+      PRODUCTOS_SERVICE_API_KEY: microservicios-api-key-2024
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - microservicios-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Nginx como API Gateway (opcional para producción)
+  nginx:
+    image: nginx:alpine
+    container_name: api-gateway
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - productos-service
+      - inventario-service
+    networks:
+      - microservicios-network
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+
+networks:
+  microservicios-network:
+    driver: bridge
